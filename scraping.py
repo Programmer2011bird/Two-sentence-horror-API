@@ -1,9 +1,9 @@
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
-from itertools import zip_longest
 import selenium.webdriver as WB
 import time
 
@@ -36,16 +36,20 @@ class scraper:
             if self.NEW_HEIGHT == self.LAST_HEIGHT:
                 break
 
-            for index, post in enumerate(posts):
+            for _, post in enumerate(posts):
                 self.RAW_INFO: list[str] = post.text.split("\n")
                 
-                self.POST_INFO: dict[str, str] = {
-                    "Author" : self.RAW_INFO[1],
-                    "First_Sentence" : self.RAW_INFO[4],
-                    "Second_Sentence" : self.RAW_INFO[5],
-                    "Number_of_Upvotes" : self.RAW_INFO[7],
-                    "Number_of_Comments" : self.RAW_INFO[9]
-                }
+                if self.RAW_INFO[4] == "SPOILER":
+                    pass
+
+                else:
+                    self.POST_INFO: dict[str, str] = {
+                        "Author" : self.RAW_INFO[1],
+                        "First_Sentence" : self.RAW_INFO[4],
+                        "Second_Sentence" : self.RAW_INFO[5],
+                        "Number_of_Upvotes" : self.RAW_INFO[7],
+                        "Number_of_Comments" : self.RAW_INFO[9]
+                    }
 
                 print(self.POST_INFO)
                 
