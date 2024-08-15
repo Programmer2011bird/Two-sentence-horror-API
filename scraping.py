@@ -18,18 +18,16 @@ class scraper:
         
         time.sleep(5)
         
-        self.get_info()
-    
     def get_info(self):
-        posts = self.DRIVER.find_elements(By.TAG_NAME, "shreddit-post")
+        posts: list[WebElement] = self.DRIVER.find_elements(By.TAG_NAME, "shreddit-post")
         
         self.DRIVER.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         time.sleep(2.5)
 
         for index, post in enumerate(posts):
-            self.RAW_INFO = post.text.split("\n")
+            self.RAW_INFO: list[str] = post.text.split("\n")
             
-            self.POST_INFO = {
+            self.POST_INFO: dict[str, str] = {
                 "Author" : self.RAW_INFO[1],
                 "First_Sentence" : self.RAW_INFO[4],
                 "Second_Sentence" : self.RAW_INFO[5],
@@ -43,4 +41,6 @@ class scraper:
 
 
 if __name__ == "__main__":
-    SCRAPER = scraper()
+    SCRAPER: scraper = scraper()
+    SCRAPER.get_info()
+    
