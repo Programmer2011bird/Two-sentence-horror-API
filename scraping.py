@@ -10,23 +10,23 @@ class scraper:
     def __init__(self, content_type: str = "hot", tops_date: str = "today") -> None:
         match content_type.lower():
             case "new":
-                self.URL = "https://www.reddit.com/r/TwoSentenceHorror/new/"
+                self.URL: str = "https://www.reddit.com/r/TwoSentenceHorror/new/"
             
             case "top":
                 match tops_date.lower():
                     case "today":
                         self.URL: str= "https://www.reddit.com/r/TwoSentenceHorror/top/?t=day"
                     
-                    case "this week":
+                    case "thisweek":
                         self.URL: str = "https://www.reddit.com/r/TwoSentenceHorror/top/?t=week"
                     
-                    case "this month":
+                    case "thismonth":
                         self.URL: str = "https://www.reddit.com/r/TwoSentenceHorror/top/?t=month"
                     
-                    case "this year":
+                    case "thisyear":
                         self.URL: str = "https://www.reddit.com/r/TwoSentenceHorror/top/?t=year"
                     
-                    case "all time":
+                    case "alltime":
                         self.URL: str = "https://www.reddit.com/r/TwoSentenceHorror/top/?t=all"
             
             case "hot":
