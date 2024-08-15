@@ -19,28 +19,39 @@ class scraper:
         time.sleep(5)
         
     def get_info(self):
-        posts: list[WebElement] = self.DRIVER.find_elements(By.TAG_NAME, "shreddit-post")
-        
-        self.DRIVER.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(2.5)
-
-        for index, post in enumerate(posts):
-            self.RAW_INFO: list[str] = post.text.split("\n")
+        while True:
+            posts: list[WebElement] = self.DRIVER.find_elements(By.TAG_NAME, "shreddit-post")
             
-            self.POST_INFO: dict[str, str] = {
-                "Author" : self.RAW_INFO[1],
-                "First_Sentence" : self.RAW_INFO[4],
-                "Second_Sentence" : self.RAW_INFO[5],
-                "Number_of_Upvotes" : self.RAW_INFO[7],
-                "Number_of_Comments" : self.RAW_INFO[9]
-            }
-
-            print(self.POST_INFO)
+            self.LAST_HEIGHT = self.DRIVER.execute_script("return document.body.scrollHeight;")
+            self.DRIVER.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             
-            print("----------------------------------------------------------------------------")
+            time.sleep(2.5)
+
+            self.NEW_HEIGHT = self.DRIVER.execute_script("return document.body.scrollHeight;")
+            
+            if self.NEW_HEIGHT >= 13625:
+                print("maximum scroll height reached or exceeded")
+                break
+
+            if self.NEW_HEIGHT == self.LAST_HEIGHT:
+                break
+
+            for index, post in enumerate(posts):
+                self.RAW_INFO: list[str] = post.text.split("\n")
+                
+                self.POST_INFO: dict[str, str] = {
+                    "Author" : self.RAW_INFO[1],
+                    "First_Sentence" : self.RAW_INFO[4],
+                    "Second_Sentence" : self.RAW_INFO[5],
+                    "Number_of_Upvotes" : self.RAW_INFO[7],
+                    "Number_of_Comments" : self.RAW_INFO[9]
+                }
+
+                print(self.POST_INFO)
+                
+                print("----------------------------------------------------------------------------")
 
 
 if __name__ == "__main__":
     SCRAPER: scraper = scraper()
     SCRAPER.get_info()
-    
