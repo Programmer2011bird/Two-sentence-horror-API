@@ -10,9 +10,32 @@ import time
 
 
 class scraper:
-    def __init__(self) -> None:
-        self.URL: str = "https://www.reddit.com/r/TwoSentenceHorror/"
-
+    def __init__(self, content_date: str = "hot", tops_date: str = "today") -> None:
+        match content_date.lower():
+            case "new":
+                self.URL = "https://www.reddit.com/r/TwoSentenceHorror/new/"
+            
+            case "top":
+                match tops_date.lower():
+                    case "today":
+                        self.URL = "https://www.reddit.com/r/TwoSentenceHorror/top/?t=day"
+                    
+                    case "this week":
+                        self.URL = "https://www.reddit.com/r/TwoSentenceHorror/top/?t=week"
+                    
+                    case "this month":
+                        self.URL = "https://www.reddit.com/r/TwoSentenceHorror/top/?t=month"
+                    
+                    case "this year":
+                        self.URL = "https://www.reddit.com/r/TwoSentenceHorror/top/?t=year"
+                    
+                    case "all time":
+                        self.URL = "https://www.reddit.com/r/TwoSentenceHorror/top/?t=all"
+            
+            case "hot":
+                self.URL: str = "https://www.reddit.com/r/TwoSentenceHorror/"
+        
+        time.sleep(5)
         self.DRIVER: WebDriver = WB.Chrome()
         self.DRIVER.get(self.URL)
         self.DRIVER.maximize_window()
@@ -50,6 +73,9 @@ class scraper:
                 
                 if self.RAW_INFO[4] == "SPOILER":
                     pass
+                
+                if self.RAW_INFO[5] == "Upvote":
+                    self.RAW_INFO[5] = None
 
                 else:
                     self.POST_INFO: dict[str, str] = {
@@ -64,5 +90,5 @@ class scraper:
 
 
 if __name__ == "__main__":
-    SCRAPER: scraper = scraper()
+    SCRAPER: scraper = scraper(content_date="top")
     print(SCRAPER.get_info())
