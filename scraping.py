@@ -5,6 +5,7 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 import selenium.webdriver as WB
+from typing import Any
 import time
 
 
@@ -19,23 +20,31 @@ class scraper:
         time.sleep(5)
         
     def get_info(self):
+        self.POSTS_LIST: list[dict[str, str]] = []
+
         while True:
             posts: list[WebElement] = self.DRIVER.find_elements(By.TAG_NAME, "shreddit-post")
             
-            self.LAST_HEIGHT = self.DRIVER.execute_script("return document.body.scrollHeight;")
+
+            self.LAST_HEIGHT: Any = self.DRIVER.execute_script("return document.body.scrollHeight;")
             self.DRIVER.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             
             time.sleep(2.5)
 
-            self.NEW_HEIGHT = self.DRIVER.execute_script("return document.body.scrollHeight;")
+            self.NEW_HEIGHT: Any = self.DRIVER.execute_script("return document.body.scrollHeight;")
             
             if self.NEW_HEIGHT >= 13625:
                 print("maximum scroll height reached or exceeded")
+                
+                return self.POSTS_LIST
+
                 break
 
             if self.NEW_HEIGHT == self.LAST_HEIGHT:
+                return self.POSTS_LIST
+            
                 break
-
+                
             for _, post in enumerate(posts):
                 self.RAW_INFO: list[str] = post.text.split("\n")
                 
@@ -51,11 +60,9 @@ class scraper:
                         "Number_of_Comments" : self.RAW_INFO[9]
                     }
 
-                print(self.POST_INFO)
-                
-                print("----------------------------------------------------------------------------")
+                    self.POSTS_LIST.append(self.POST_INFO)
 
 
 if __name__ == "__main__":
     SCRAPER: scraper = scraper()
-    SCRAPER.get_info()
+    print(SCRAPER.get_info())
