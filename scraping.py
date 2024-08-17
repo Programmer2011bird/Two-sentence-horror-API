@@ -10,27 +10,27 @@ class scraper:
     def __init__(self, content_type: str = "hot", tops_date: str = "today") -> None:
         match content_type.lower():
             case "new":
-                self.URL: str = "https://www.reddit.com/r/TwoSentenceHorror/new/"
+                self.URL: str = "https://www.reddit.com/r/TwoSentenceHorror/new/?rdt=53161"
             
             case "top":
                 match tops_date.lower():
                     case "today":
-                        self.URL: str= "https://www.reddit.com/r/TwoSentenceHorror/top/?t=day"
+                        self.URL: str= "https://www.reddit.com/r/TwoSentenceHorror/top/?t=day&rdt=53161"
                     
                     case "thisweek":
-                        self.URL: str = "https://www.reddit.com/r/TwoSentenceHorror/top/?t=week"
+                        self.URL: str = "https://www.reddit.com/r/TwoSentenceHorror/top/?t=week&rdt=53161"
                     
                     case "thismonth":
-                        self.URL: str = "https://www.reddit.com/r/TwoSentenceHorror/top/?t=month"
+                        self.URL: str = "https://www.reddit.com/r/TwoSentenceHorror/top/?t=month&rdt=53161"
                     
                     case "thisyear":
-                        self.URL: str = "https://www.reddit.com/r/TwoSentenceHorror/top/?t=year"
+                        self.URL: str = "https://www.reddit.com/r/TwoSentenceHorror/top/?t=year&rdt=53161"
                     
                     case "alltime":
-                        self.URL: str = "https://www.reddit.com/r/TwoSentenceHorror/top/?t=all"
+                        self.URL: str = "https://www.reddit.com/r/TwoSentenceHorror/top/?t=all&rdt=53161"
             
             case "hot":
-                self.URL: str = "https://www.reddit.com/r/TwoSentenceHorror/"
+                self.URL: str = "https://www.reddit.com/r/TwoSentenceHorror/?rdt=53161"
         
         time.sleep(5)
 
@@ -69,6 +69,9 @@ class scraper:
                 self.RAW_INFO: list[str] = post.text.split("\n")
                 
                 if self.RAW_INFO[4] == "SPOILER":
+                    pass
+                    
+                if self.RAW_INFO[4] == "NSFW":
                     pass
                 
                 if self.RAW_INFO[5] == "Upvote":
