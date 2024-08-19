@@ -24,4 +24,4 @@ class API_controller:
             print(f"{Fore.LIGHTGREEN_EX}NUMBER OF UPVOTES : {Fore.CYAN}{self.NUMBER_OF_UPVOTES}")
             print(f"{Fore.LIGHTGREEN_EX}NUMBER OF COMMENTS : {Fore.CYAN}{self.NUMBER_OF_COMMENTS}")
 
-            func()
+            func(self.AUTHOR, self.FIRST_SENTENCE, self.SECOND_SENTENCE, self.NUMBER_OF_UPVOTES, self.NUMBER_OF_COMMENTS)
