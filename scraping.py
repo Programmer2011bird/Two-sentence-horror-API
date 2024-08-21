@@ -59,20 +59,20 @@ class scraper:
 
             self.enumerate_posts()
     
-    def enumerate_posts(self):
+    def enumerate_posts(self) -> None:
         for _, post in enumerate(self.posts):
             try:
-                CONTENT = post.text.split('\n')
+                CONTENT: list[str] = post.text.split('\n')
 
                 if CONTENT[4].lower() == "spoiler":
-                    self.FIRST_SENTENCE = CONTENT[0]
-                    self.SECOND_SENTENCE = CONTENT[-7]
-                    self.AUTHOR = CONTENT[1]
-                    self.REDDIT_UPVOTES = CONTENT[-4]
-                    self.TIME = CONTENT[3]
-                    self.TYPE = "spoiler"
+                    self.FIRST_SENTENCE: str = CONTENT[0]
+                    self.SECOND_SENTENCE: str = CONTENT[-7]
+                    self.AUTHOR: str = CONTENT[1]
+                    self.REDDIT_UPVOTES: str = CONTENT[-4]
+                    self.TIME: str = CONTENT[3]
+                    self.TYPE: str = "spoiler"
                        
-                    self.INFO = {
+                    self.INFO: dict[str, str] = {
                         "First_Sentence" : self.FIRST_SENTENCE,
                         "Second_Sentence" : self.SECOND_SENTENCE,
                         "Author" : self.AUTHOR,
@@ -84,14 +84,14 @@ class scraper:
                     self.POSTS_INFO.append(self.INFO)
 
                 elif CONTENT[4].lower() == "nsfw":
-                    self.FIRST_SENTENCE = CONTENT[0]
-                    self.SECOND_SENTENCE = CONTENT[-7]
-                    self.AUTHOR = CONTENT[1]
-                    self.REDDIT_UPVOTES = CONTENT[-4]
-                    self.TIME = CONTENT[3]
-                    self.TYPE = "nsfw"
+                    self.FIRST_SENTENCE: str= CONTENT[0]
+                    self.SECOND_SENTENCE: str = CONTENT[-7]
+                    self.AUTHOR: str = CONTENT[1]
+                    self.REDDIT_UPVOTES: str = CONTENT[-4]
+                    self.TIME: str = CONTENT[3]
+                    self.TYPE: str = "nsfw"
                         
-                    self.INFO = {
+                    self.INFO: dict[str, str] = {
                         "First_Sentence" : self.FIRST_SENTENCE,
                         "Second_Sentence" : self.SECOND_SENTENCE,
                         "Author" : self.AUTHOR,
@@ -102,14 +102,14 @@ class scraper:
                     self.POSTS_INFO.append(self.INFO)
 
                 else : 
-                    self.FIRST_SENTENCE = CONTENT[0]
-                    self.SECOND_SENTENCE = CONTENT[-6]
-                    self.AUTHOR = CONTENT[1]
-                    self.REDDIT_UPVOTES = CONTENT[-4]
-                    self.TIME = CONTENT[3]
-                    self.TYPE = "normal"
+                    self.FIRST_SENTENCE: str = CONTENT[0]
+                    self.SECOND_SENTENCE: str = CONTENT[-6]
+                    self.AUTHOR: str = CONTENT[1]
+                    self.REDDIT_UPVOTES: str = CONTENT[-4]
+                    self.TIME: str = CONTENT[3]
+                    self.TYPE: str = "normal"
                 
-                    self.INFO = {
+                    self.INFO: dict[str, str] = {
                         "First_Sentence" : self.FIRST_SENTENCE,
                         "Second_Sentence" : self.SECOND_SENTENCE,
                         "Author" : self.AUTHOR,
