@@ -32,58 +32,93 @@ class scraper:
             case "hot":
                 self.URL: str = "https://www.reddit.com/r/TwoSentenceHorror/?rdt=53161"
         
-        time.sleep(5)
-
         self.DRIVER: WebDriver = WB.Chrome()
         self.DRIVER.get(self.URL)
         self.DRIVER.maximize_window()
         
-        time.sleep(5)
+        time.sleep(2.5)
         
     def get_info(self) -> list[dict[str, str]]:
-        self.POSTS_LIST: list[dict[str, str]] = []
+        self.POSTS_INFO: list[dict[str, str]] = []
 
         while True:
-            posts: list[WebElement] = self.DRIVER.find_elements(By.TAG_NAME, "shreddit-post")
+            self.posts: list[WebElement] = self.DRIVER.find_elements(By.TAG_NAME, "shreddit-post")
             
-            self.LAST_HEIGHT: Any = self.DRIVER.execute_script("return document.body.scrollHeight;")
             self.DRIVER.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             
             time.sleep(2.5)
+            NEW_HEIGHT: Any = self.DRIVER.execute_script("return document.body.scrollHeight;")
+            time.sleep(2)
 
-            self.NEW_HEIGHT: Any = self.DRIVER.execute_script("return document.body.scrollHeight;")
-            
-            if self.NEW_HEIGHT >= 13625:
+            if NEW_HEIGHT >= 13625:
                 print("maximum scroll height reached or exceeded")
                 
-                return self.POSTS_LIST
+                return self.POSTS_INFO
 
                 break
 
-            if self.NEW_HEIGHT == self.LAST_HEIGHT:
-                return self.POSTS_LIST
-            
-                break
-                
-            for _, post in enumerate(posts):
-                self.RAW_INFO: list[str] = post.text.split("\n")
-                
-                if self.RAW_INFO[4] == "SPOILER":
-                    pass
-                    
-                if self.RAW_INFO[4] == "NSFW":
-                    pass
-                
-                if self.RAW_INFO[5] == "Upvote":
-                    self.RAW_INFO[5] = None
+            self.enumerate_posts()
+    
+    def enumerate_posts(self):
+        for _, post in enumerate(self.posts):
+            try:
+                CONTENT = post.text.split('\n')
 
-                else:
-                    self.POST_INFO: dict[str, str] = {
-                        "Author" : self.RAW_INFO[1],
-                        "First_Sentence" : self.RAW_INFO[4],
-                        "Second_Sentence" : self.RAW_INFO[5],
-                        "Number_of_Upvotes" : self.RAW_INFO[7],
-                        "Number_of_Comments" : self.RAW_INFO[9]
+                if CONTENT[4].lower() == "spoiler":
+                    self.FIRST_SENTENCE = CONTENT[0]
+                    self.SECOND_SENTENCE = CONTENT[-7]
+                    self.AUTHOR = CONTENT[1]
+                    self.REDDIT_UPVOTES = CONTENT[-4]
+                    self.TIME = CONTENT[3]
+                    self.TYPE = "spoiler"
+                       
+                    self.INFO = {
+                        "First_Sentence" : self.FIRST_SENTENCE,
+                        "Second_Sentence" : self.SECOND_SENTENCE,
+                        "Author" : self.AUTHOR,
+                        "Reddit_Upvotes" : self.REDDIT_UPVOTES,
+                        "Time" : self.TIME,
+                        "Type" : self.TYPE
                     }
+                        
+                    self.POSTS_INFO.append(self.INFO)
 
-                    self.POSTS_LIST.append(self.POST_INFO)
+                elif CONTENT[4].lower() == "nsfw":
+                    self.FIRST_SENTENCE = CONTENT[0]
+                    self.SECOND_SENTENCE = CONTENT[-7]
+                    self.AUTHOR = CONTENT[1]
+                    self.REDDIT_UPVOTES = CONTENT[-4]
+                    self.TIME = CONTENT[3]
+                    self.TYPE = "nsfw"
+                        
+                    self.INFO = {
+                        "First_Sentence" : self.FIRST_SENTENCE,
+                        "Second_Sentence" : self.SECOND_SENTENCE,
+                        "Author" : self.AUTHOR,
+                        "Reddit_Upvotes" : self.REDDIT_UPVOTES,
+                        "Time" : self.TIME,
+                        "Type" : self.TYPE
+                    }
+                    self.POSTS_INFO.append(self.INFO)
+
+                else : 
+                    self.FIRST_SENTENCE = CONTENT[0]
+                    self.SECOND_SENTENCE = CONTENT[-6]
+                    self.AUTHOR = CONTENT[1]
+                    self.REDDIT_UPVOTES = CONTENT[-4]
+                    self.TIME = CONTENT[3]
+                    self.TYPE = "normal"
+                
+                    self.INFO = {
+                        "First_Sentence" : self.FIRST_SENTENCE,
+                        "Second_Sentence" : self.SECOND_SENTENCE,
+                        "Author" : self.AUTHOR,
+                        "Reddit_Upvotes" : self.REDDIT_UPVOTES,
+                        "Time" : self.TIME,
+                        "Type" : self.TYPE
+                    }
+                        
+                    self.POSTS_INFO.append(self.INFO)
+
+            except Exception:
+                continue
